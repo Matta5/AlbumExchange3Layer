@@ -13,10 +13,10 @@
     <div class="form-group">
         <label for="username" class="control-label">Username:</label>
         @Html.EditorFor(model => model.username)
-        @Html.ValidationMessageFor(model => model.new_username, "", new { @class = "text-danger" })
+        @Html.ValidationMessageFor(model => model.username, "", new { @class = "text-danger" })
     </div>
 
-    <input type="hidden" name="id" value="@Model.user_id" />
+    @Html.HiddenFor(model => model.user_id)
 
     <button type="submit" class="btn btn-primary">Save Changes</button>
 }

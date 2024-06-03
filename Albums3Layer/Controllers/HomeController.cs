@@ -1,7 +1,5 @@
 using Albums3Layer.Models;
-using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Data.SqlClient;
 using System.Diagnostics;
 
 namespace Albums3Layer.Controllers

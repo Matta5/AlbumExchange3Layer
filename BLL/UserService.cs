@@ -9,6 +9,7 @@ namespace Albums3Layer.BLL
 
         public UserService(IUserRepository userRepository)
         {
+
             this.userRepository = userRepository;
         }
         public User GetUserById(int id)
@@ -24,6 +25,16 @@ namespace Albums3Layer.BLL
         public void CreateUser(User user)
         {
           userRepository.CreateUser(user);
+        }
+
+        public void DeleteUser(int id)
+        {
+          userRepository.DeleteUser(id);
+        }
+
+        public void EditUser(User user)
+        {
+             userRepository.EditUser(user);
         }
 
         // Add other methods for implementing the business logic here

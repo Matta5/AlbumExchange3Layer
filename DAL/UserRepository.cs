@@ -1,5 +1,4 @@
-﻿using Albums3Layer.BLL;
-using Albums3Layer.BBL.Models;
+﻿using Albums3Layer.BBL.Models;
 using System.Data.SqlClient;
 using BLL.Interfaces;
 
@@ -32,7 +31,6 @@ namespace DAL
                             username = reader.GetString(1),
                             email = reader.GetString(2),
                             password = reader.GetString(3)
-                            // Add other properties as needed
                         };
                     }
                 }
@@ -71,12 +69,40 @@ namespace DAL
             {
                 s.Open();
 
-                string insertQuery = "INSERT INTO [User] (username, email, password) VALUES (@Username, @Email, @Password)";
+                string insertQuery = "INSERT INTO [User] (username, email, password, profile_picture) VALUES (@Username, @Email, @Password, @ProfilePicture)";
                 SqlCommand cmd = new SqlCommand(insertQuery, s);
                 cmd.Parameters.AddWithValue("@Username", user.username);
                 cmd.Parameters.AddWithValue("@Email", user.email);
                 cmd.Parameters.AddWithValue("@Password", user.password);
+                cmd.Parameters.AddWithValue("@ProfilePicture", user.profile_picture ?? (object)DBNull.Value);
 
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        public void DeleteUser(int id)
+        {
+            using (SqlConnection s = new SqlConnection(connectionString))
+            {
+                s.Open();
+
+                string deleteQuery = "DELETE FROM [User] WHERE user_id = @UserId";
+                SqlCommand cmd = new SqlCommand(deleteQuery, s);
+                cmd.Parameters.AddWithValue("@UserId", id);
+
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        public void EditUser(User user)
+        {
+            using (SqlConnection s = new SqlConnection(connectionString))
+            {
+                s.Open();
+                string updateQuery = "UPDATE [User] SET username = @Username WHERE user_id = @UserId";
+                SqlCommand cmd = new SqlCommand(updateQuery, s);
+                cmd.Parameters.AddWithValue("@Username", user.username);
+                cmd.Parameters.AddWithValue("@UserId", user.user_id);
                 cmd.ExecuteNonQuery();
             }
         }

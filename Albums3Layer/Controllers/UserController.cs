@@ -1,6 +1,5 @@
 ﻿using Albums3Layer.BLL;
 using Microsoft.AspNetCore.Mvc;
-using Albums3Layer.Models;
 using DAL;
 using Albums3Layer.BBL.Models;
 
@@ -80,7 +79,53 @@ namespace Albums3Layer.Controllers
             }
         }
 
+        // GET: User/Delete/5
+        public ActionResult Delete(int id)
+        {
+            User user = userService.GetUserById(id);
+            if (user == null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            userService.DeleteUser(id);
 
-        // Other actions...
+            return RedirectToAction(nameof(Index));
+        }
+
+        // GET: User/Edit/5
+        public ActionResult Edit(int id)
+        {
+            User user = userService.GetUserById(id);
+            if (user == null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            return View(user);
+        }
+
+        // POST: User/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(int id, User user)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    user.user_id = id;
+                    userService.EditUser(user);
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    return View(user);
+                }
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
     }
 }
