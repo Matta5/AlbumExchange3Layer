@@ -30,8 +30,7 @@ namespace Albums3Layer.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Hardcoded user_id
-                int userId = 3;
+                int userId = 18;
 
                 // Ensure you're passing the userId to the AddReview method
                 _reviewService.AddReview(model.UserName, model.Title, model.Rating, model.Comment, userId);

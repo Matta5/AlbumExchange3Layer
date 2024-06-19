@@ -1,5 +1,4 @@
-﻿@using Albums3Layer.BBL.Models
-@model IEnumerable<Review>
+﻿@model IEnumerable<BLL.Review>
 
 @foreach (var review in Model)
 {
@@ -9,4 +8,9 @@
         <p>@review.Comment</p>
         <p>Reviewed by: @review.UserName</p>
     </div>
+
+    
+
+
 }
+<a class="btn btn-primary" asp-controller="Review" asp-action="Add">Add Review</a>

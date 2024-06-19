@@ -20,7 +20,7 @@ namespace DAL
             using (var connection = new SqlConnection(_connectionString))
             {
                 var command = new SqlCommand(
-                    "INSERT INTO Review (rating, comment, title, user_id, date) VALUES (@rating, @comment, @title, @user_id, @date)",
+                    "INSERT INTO Review (rating, comment, title, user_id) VALUES (@rating, @comment, @title, @user_id)",
                     connection);
                 command.Parameters.AddWithValue("@rating", review.Rating);
                 command.Parameters.AddWithValue("@comment", review.Comment);
@@ -39,7 +39,7 @@ namespace DAL
             using (var connection = new SqlConnection(_connectionString))
             {
                 var command = new SqlCommand(
-                    "SELECT Review.*, User.username FROM Review INNER JOIN User ON Review.user_id = User.user_id",
+                    "SELECT Review.review_id, Review.rating, Review.comment, Review.title, Review.user_id, [user].username FROM Review INNER JOIN [user] ON Review.user_id = [user].user_id",
                     connection);
                 connection.Open();
                 using (var reader = command.ExecuteReader())
@@ -53,7 +53,7 @@ namespace DAL
                             Comment = reader.GetString(reader.GetOrdinal("comment")),
                             Title = reader.GetString(reader.GetOrdinal("title")),
                             UserId = reader.GetInt32(reader.GetOrdinal("user_id")),
-                            UserName = reader.GetString(reader.GetOrdinal("username")) // Fetch and assign the username
+                            UserName = reader.GetString(reader.GetOrdinal("username"))
                         };
                         reviews.Add(review);
                     }
