@@ -38,7 +38,9 @@ namespace DAL
 
             using (var connection = new SqlConnection(_connectionString))
             {
-                var command = new SqlCommand("SELECT * FROM Review", connection);
+                var command = new SqlCommand(
+                    "SELECT Review.*, User.username FROM Review INNER JOIN User ON Review.user_id = User.user_id",
+                    connection);
                 connection.Open();
                 using (var reader = command.ExecuteReader())
                 {
@@ -50,7 +52,8 @@ namespace DAL
                             Rating = reader.GetInt32(reader.GetOrdinal("rating")),
                             Comment = reader.GetString(reader.GetOrdinal("comment")),
                             Title = reader.GetString(reader.GetOrdinal("title")),
-                            UserId = reader.GetInt32(reader.GetOrdinal("user_id"))
+                            UserId = reader.GetInt32(reader.GetOrdinal("user_id")),
+                            UserName = reader.GetString(reader.GetOrdinal("username")) // Fetch and assign the username
                         };
                         reviews.Add(review);
                     }

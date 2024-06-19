@@ -19,11 +19,26 @@ namespace Albums3Layer.Controllers
             return View(reviews);
         }
 
-        [HttpPost]
-        public IActionResult Add(string userName, string title, int rating, string comment, int userId)
+        [HttpGet]
+        public IActionResult Add()
         {
-            _reviewService.AddReview(userName, title, rating, comment, userId);
-            return RedirectToAction("Index");
+               return View();
+        }
+
+            [HttpPost]
+        public IActionResult Add(Review model)
+        {
+            if (ModelState.IsValid)
+            {
+                // Hardcoded user_id
+                int userId = 3;
+
+                // Ensure you're passing the userId to the AddReview method
+                _reviewService.AddReview(model.UserName, model.Title, model.Rating, model.Comment, userId);
+
+                return RedirectToAction("Index"); // Redirect to a confirmation page or list view
+            }
+            return View(model);
         }
     }
 }

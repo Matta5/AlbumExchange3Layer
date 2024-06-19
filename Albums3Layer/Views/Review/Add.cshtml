@@ -1,0 +1,27 @@
+﻿@{
+    ViewData["Title"] = "Add Review";
+}
+
+<h2>Add Review</h2>
+
+<form asp-action="Add" method="post">
+    <div class="form-group">
+        <label for="userName">Your Name</label>
+        <input type="text" name="userName" class="form-control" placeholder="Your Name" required />
+    </div>
+    <div class="form-group">
+        <label for="title">Title</label>
+        <input type="text" name="title" class="form-control" placeholder="Title" required />
+    </div>
+    <div class="form-group">
+        <label for="rating">Rating</label>
+        <input type="number" name="rating" class="form-control" placeholder="Rating" required min="1" max="5" />
+    </div>
+    <div class="form-group">
+        <label for="comment">Comment</label>
+        <textarea name="comment" class="form-control" placeholder="Your Comment" required></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Add Review</button>
+</form>
+
+<a asp-action="Index">Back to Reviews</a>

@@ -1,19 +1,12 @@
-﻿@model IEnumerable<BLL.Review>
+﻿@using Albums3Layer.BBL.Models
+@model IEnumerable<Review>
 
-<h2>Reviews</h2>
 @foreach (var review in Model)
 {
     <div>
-        <p><strong>@review.UserName</strong></p>
-        <p><strong>Title:</strong> @review.Title</p>
-        <p><strong>Rating:</strong> @review.Rating</p>
+        <h2>@review.Title</h2>
+        <p>Rating: @review.Rating</p>
         <p>@review.Comment</p>
+        <p>Reviewed by: @review.UserName</p>
     </div>
 }
-<form asp-action="Add" method="post">
-    <input type="text" name="userName" placeholder="Your Name" required />
-    <input type="text" name="title" placeholder="Title" required />
-    <input type="number" name="rating" placeholder="Rating" required min="1" max="5" />
-    <textarea name="comment" placeholder="Your Comment" required></textarea>
-    <button type="submit">Add Review</button>
-</form>
