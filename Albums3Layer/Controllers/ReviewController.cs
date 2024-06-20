@@ -25,19 +25,34 @@ namespace Albums3Layer.Controllers
                return View();
         }
 
-            [HttpPost]
+        [HttpPost]
         public IActionResult Add(Review model)
         {
             if (ModelState.IsValid)
             {
-                int userId = 18;
+                try
+                {
+                    int userId = 18; // Example user ID, this should be dynamically determined based on your application's requirements
 
-                // Ensure you're passing the userId to the AddReview method
-                _reviewService.AddReview(model.UserName, model.Title, model.Rating, model.Comment, userId);
+                    model.UserId = userId;
 
-                return RedirectToAction("Index"); // Redirect to a confirmation page or list view
+
+                    _reviewService.AddReview(model.UserName, model.Title, model.Rating, model.Comment, userId);
+
+                    return RedirectToAction("Index");
+                }
+                catch (ArgumentException ex)
+                {
+                    // Add the exception message to the ModelState to display in the view
+                    ModelState.AddModelError(string.Empty, ex.Message);
+                }
             }
             return View(model);
         }
+
+
+
+
+
     }
 }

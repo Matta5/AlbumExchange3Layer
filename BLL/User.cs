@@ -12,5 +12,9 @@ namespace Albums3Layer.BBL.Models
         public string password { get; set; }
         public string new_username { get; set; }
 
+
+
+
+
     }
 }
