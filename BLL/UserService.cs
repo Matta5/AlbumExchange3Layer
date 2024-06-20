@@ -1,5 +1,6 @@
 ﻿using Albums3Layer.BBL.Models;
 using BLL.Interfaces;
+using System.Text.RegularExpressions;
 
 namespace Albums3Layer.BLL
 {
@@ -24,7 +25,11 @@ namespace Albums3Layer.BLL
 
         public void CreateUser(User user)
         {
-          userRepository.CreateUser(user);
+            if (!IsValidPassword(user.password))
+            {
+                throw new ArgumentException("Password must include at least one capital letter.");
+            }
+            userRepository.CreateUser(user);
         }
 
         public void DeleteUser(int id)
@@ -37,6 +42,13 @@ namespace Albums3Layer.BLL
              userRepository.EditUser(user);
         }
 
-        // Add other methods for implementing the business logic here
+        public bool IsValidPassword(string password)
+        {
+            if (string.IsNullOrEmpty(password))
+                return false;
+
+            // Check if the password contains at least one capital letter
+            return Regex.IsMatch(password, "[A-Z]");
+        }
     }
 }

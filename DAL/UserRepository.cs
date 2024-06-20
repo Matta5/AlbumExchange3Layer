@@ -55,13 +55,23 @@ namespace DAL
                         u.username = reader.GetString(1);
                         u.email = reader.GetString(2);
                         u.password = reader.GetString(3);
-                        u.profile_picture = reader.GetString(4);
+                        // Check if profile_picture is NULL
+                        if (!reader.IsDBNull(4))
+                        {
+                            u.profile_picture = reader.GetString(4);
+                        }
+                        else
+                        {
+                            // Assign a default value if profile_picture is NULL
+                            u.profile_picture = "Images/Default.jpg";
+                        }
                         users.Add(u);
                     }
                 }
-             return users;
+                return users;
             }
         }
+
 
         public void CreateUser(User user)
         {
