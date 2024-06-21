@@ -79,6 +79,21 @@ namespace Albums3Layer.Controllers
             }
         }
 
+        public ActionResult CreateUser(User user)
+        {
+            string passwordValidationResult = userService.IsValidPassword(user.password);
+            if (passwordValidationResult != null)
+            {
+                ModelState.AddModelError("Password", passwordValidationResult);
+
+                return View(user);
+            }
+
+            userService.CreateUser(user);
+            return RedirectToAction(nameof(Index)); 
+        }
+
+
         // GET: User/Delete/5
         public ActionResult Delete(int id)
         {

@@ -25,9 +25,10 @@ namespace Albums3Layer.BLL
 
         public void CreateUser(User user)
         {
-            if (!IsValidPassword(user.password))
+            string passwordValidationResult = IsValidPassword(user.password);
+            if (passwordValidationResult != null)
             {
-                throw new ArgumentException("Password must include at least one capital letter.");
+                throw new ArgumentException(passwordValidationResult);
             }
             userRepository.CreateUser(user);
         }
@@ -42,13 +43,20 @@ namespace Albums3Layer.BLL
              userRepository.EditUser(user);
         }
 
-        public bool IsValidPassword(string password)
+        public string IsValidPassword(string password)
         {
             if (string.IsNullOrEmpty(password))
-                return false;
+                return "Password cannot be empty.";
 
-            // Check if the password contains at least one capital letter
-            return Regex.IsMatch(password, "[A-Z]");
+            bool hasUpperCase = Regex.IsMatch(password, "[A-Z]");
+            bool hasNumber = Regex.IsMatch(password, "[0-9]");
+
+            if (!hasUpperCase)
+                return "Password must include at least one capital letter.";
+            if (!hasNumber)
+                return "Password must include at least one number.";
+
+            return null; // null indicates the password is valid
         }
     }
 }
