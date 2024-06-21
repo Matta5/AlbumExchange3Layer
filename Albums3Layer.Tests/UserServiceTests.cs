@@ -37,7 +37,7 @@ namespace Albums3Layer.Tests
         [TestMethod]
         public void CreateUser_WithValidPassword_ShouldNotThrowException()
         {
-            var user = new User { Username = "testuser", Password = "ValidPass123" };
+            var user = new User { username = "testuser", password = "ValidPass123" };
 
             try
             {
@@ -52,7 +52,7 @@ namespace Albums3Layer.Tests
         [TestMethod]
         public void CreateUser_WithInvalidPassword_ShouldThrowException()
         {
-            var user = new User { Username = "testuser", Password = "invalidpass" };
+            var user = new User { username = "testuser", password = "invalidpass" };
 
             Assert.ThrowsException<ArgumentException>(() => _userService.CreateUser(user));
         }
@@ -60,7 +60,7 @@ namespace Albums3Layer.Tests
         [TestMethod]
         public void EditUser_WithValidPassword_ShouldNotThrowException()
         {
-            var user = new User { Id = 1, Username = "testuser", Password = "ValidPass123" };
+            var user = new User { user_id = 1, username = "testuser", password = "ValidPass123" };
 
             try
             {
@@ -75,7 +75,7 @@ namespace Albums3Layer.Tests
         [TestMethod]
         public void EditUser_WithInvalidPassword_ShouldThrowException()
         {
-            var user = new User { Id = 1, Username = "testuser", Password = "invalidpass" };
+            var user = new User { user_id = 1, username = "testuser", password = "invalidpass" };
 
             Assert.ThrowsException<ArgumentException>(() => _userService.EditUser(user));
         }
