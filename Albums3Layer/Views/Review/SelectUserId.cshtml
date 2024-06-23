@@ -1,0 +1,15 @@
+﻿@{
+    ViewData["Title"] = "Select user";
+}
+
+@{
+    Layout = null;
+}
+
+<h2>Select User ID</h2>
+
+<form method="post" action="/Review/SetUserId">
+    <button name="userId" value="3" type="submit">Mathijs (Admin)</button>
+    <button name="userId" value="4" type="submit">Bert</button>
+    <button name="userId" value="3" type="submit">Patrick</button>
+</form>

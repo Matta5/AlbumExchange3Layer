@@ -81,17 +81,29 @@ namespace Albums3Layer.Controllers
 
         public ActionResult CreateUser(User user)
         {
+            // Validate the password
             string passwordValidationResult = userService.IsValidPassword(user.password);
             if (passwordValidationResult != null)
             {
-                ModelState.AddModelError("Password", passwordValidationResult);
-
+                // Password is not valid, add a custom error message and return to the Create view
+                ModelState.AddModelError("Password", "Het wachtwoord wat je hebt ingevoerd is niet sterk genoeg.");
                 return View(user);
             }
 
-            userService.CreateUser(user);
-            return RedirectToAction(nameof(Index)); 
+            // Attempt to create the user
+            bool createUserResult = userService.CreateUser(user);
+            if (!createUserResult)
+            {
+                // User creation failed, add a generic error message and return to the Create view
+                ModelState.AddModelError("", "Er is een fout opgetreden bij het aanmaken van de gebruiker.");
+                return View(user);
+            }
+
+            // User creation was successful, redirect to Index
+            return RedirectToAction(nameof(Index));
         }
+
+
 
 
         // GET: User/Delete/5

@@ -23,15 +23,17 @@ namespace Albums3Layer.BLL
             return userRepository.GetAllUsers();
         }
 
-        public void CreateUser(User user)
+        public bool CreateUser(User user)
         {
             string passwordValidationResult = IsValidPassword(user.password);
             if (passwordValidationResult != null)
             {
-                throw new ArgumentException(passwordValidationResult);
+                return false;
             }
             userRepository.CreateUser(user);
+            return true;
         }
+
 
         public void DeleteUser(int id)
         {
@@ -56,7 +58,7 @@ namespace Albums3Layer.BLL
             if (!hasNumber)
                 return "Password must include at least one number.";
 
-            return null; // null indicates the password is valid
+            return null;
         }
     }
 }

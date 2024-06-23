@@ -10,9 +10,9 @@ namespace DAL
     {
         private readonly string _connectionString;
 
-        public ReviewRepository(string connectionString)
+        public ReviewRepository()
         {
-            _connectionString = connectionString;
+            _connectionString = "Server=Mathijs\\MSSQLSERVER02;Database=AlbumExchange;User Id=test;Password=test;TrustServerCertificate=True;Encrypt=False;Trusted_Connection=true;";
         }
 
         public void AddReview(Review review)
@@ -62,5 +62,17 @@ namespace DAL
 
             return reviews;
         }
+        public void DeleteReview(int reviewId)
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var command = new SqlCommand("DELETE FROM Review WHERE review_id = @reviewId", connection);
+                command.Parameters.AddWithValue("@reviewId", reviewId);
+
+                connection.Open();
+                command.ExecuteNonQuery();
+            }
+        }
+
     }
 }

@@ -16,6 +16,7 @@ namespace Albums3Layer.Controllers
         public IActionResult Index()
         {
             var reviews = _reviewService.GetReviews();
+            ViewBag.UserId = HttpContext.Session.GetInt32("UserId");
             return View(reviews);
         }
 
@@ -25,6 +26,12 @@ namespace Albums3Layer.Controllers
                return View();
         }
 
+        [HttpGet]
+        public IActionResult SelectUserId()
+        {
+            return View();
+        }
+
         [HttpPost]
         public IActionResult Add(Review model)
         {
@@ -32,10 +39,9 @@ namespace Albums3Layer.Controllers
             {
                 try
                 {
-                    int userId = 18; // Example user ID, this should be dynamically determined based on your application's requirements
+                    int userId = HttpContext.Session.GetInt32("UserId") ?? 0;
 
                     model.UserId = userId;
-
 
                     _reviewService.AddReview(model.UserName, model.Title, model.Rating, model.Comment, userId);
 
@@ -43,11 +49,27 @@ namespace Albums3Layer.Controllers
                 }
                 catch (ArgumentException ex)
                 {
-                    // Add the exception message to the ModelState to display in the view
                     ModelState.AddModelError(string.Empty, ex.Message);
                 }
             }
             return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult DeleteReview(int reviewId)
+        {
+            int userId = HttpContext.Session.GetInt32("UserId") ?? 0; // Retrieve userId from session
+            _reviewService.DeleteReview(reviewId, userId); // Pass both reviewId and userId to the service
+            return RedirectToAction("Index");
+        }
+
+
+
+        [HttpPost]
+        public IActionResult SetUserId(int userId)
+        {
+            HttpContext.Session.SetInt32("UserId", userId);
+            return RedirectToAction("Index"); // Adjust the redirection as needed
         }
 
 

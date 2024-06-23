@@ -1,36 +1,70 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using DAL;
-using BLL; // Assuming your business logic layer namespace
-using BLL.Interfaces; // Assuming your business logic interfaces are here
-using System.Linq;
+using BLL;
+using BLL.Interfaces;
 
 [TestClass]
 public class ReviewServiceTests
 {
-    private FakeReviewRepository _fakeReviewRepository;
-    private IReviewService _reviewService; // Assuming an IReviewService interface
+    private IReviewRepository _fakeReviewRepository;
+    private ReviewService _reviewService;
 
     [TestInitialize]
     public void Setup()
     {
         _fakeReviewRepository = new FakeReviewRepository();
-        _reviewService = new ReviewService(_fakeReviewRepository); // Assuming ReviewService takes an IReviewRepository in its constructor
+        _reviewService = new ReviewService(_fakeReviewRepository);
     }
 
     [TestMethod]
-    public void AddReview_ShouldIncreaseCount()
+    public void DeleteReview_WithCorrectUserId_ShouldDeleteReview()
     {
-        // Arrange
-        var initialCount = _fakeReviewRepository.GetAllReviews().Count();
-        var review = new Review { /* Initialize review properties */ };
 
-        // Act
-        _reviewService.AddReview(review);
+        int userId = 3;
+        int reviewId = 1;
+        _fakeReviewRepository.AddReview(new Review { Id = reviewId, UserId = userId });
 
-        // Assert
-        var newCount = _fakeReviewRepository.GetAllReviews().Count();
-        Assert.AreEqual(initialCount + 1, newCount);
+
+        _reviewService.DeleteReview(reviewId, userId);
+
+
+        Assert.IsFalse(_fakeReviewRepository.GetReviews().Any(r => r.Id == reviewId), "Review should be deleted.");
     }
 
-    // Add more tests as needed
+    [TestMethod]
+    [ExpectedException(typeof(UnauthorizedAccessException))]
+    public void DeleteReview_WithIncorrectUserId_ShouldThrowException()
+    {
+
+        int unauthorizedUserId = 2;
+        int reviewId = 1;
+        _fakeReviewRepository.AddReview(new Review { Id = reviewId, UserId = 3 });
+
+
+        _reviewService.DeleteReview(reviewId, unauthorizedUserId);
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void AddReview_WithBannedWordsInComment_ShouldThrowException()
+    {
+
+        string commentWithBannedWords = "This is a comment with ziektes.";
+
+
+        _reviewService.AddReview("User1", "Title1", 5, commentWithBannedWords, 1);
+    }
+
+    [TestMethod]
+    public void AddReview_WithoutBannedWordsInComment_ShouldAddReview()
+    {
+
+        string commentWithoutBannedWords = "This is a safe comment.";
+
+
+        _reviewService.AddReview("User1", "Title1", 5, commentWithoutBannedWords, 1);
+
+
+        Assert.IsTrue(_fakeReviewRepository.GetReviews().Any(r => r.Comment == commentWithoutBannedWords), "Review should be added.");
+    }
 }

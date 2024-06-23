@@ -1,18 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using BLL.Interfaces;
+﻿using BLL.Interfaces;
+
 
 namespace BLL
 {
     public class ReviewService
     {
         private readonly IReviewRepository _reviewRepository;
-        private readonly List<string> _bannedWords = new List<string> { "kanker", "tyfus" };
+        private readonly List<string> _bannedWords = new List<string> { "ziektes", "Patrick is geen goede leraar" };
 
         public ReviewService(IReviewRepository reviewRepository)
         {
             _reviewRepository = reviewRepository;
         }
+
 
         public void AddReview(string userName, string title, int rating, string comment, int userId)
         {
@@ -36,6 +36,18 @@ namespace BLL
             _reviewRepository.AddReview(review);
         }
 
+        public void DeleteReview(int reviewId, int userId)
+        {
+            if (userId != 3)
+            {
+                throw new UnauthorizedAccessException("Only user with ID 3 can delete reviews.");
+            }
+
+            _reviewRepository.DeleteReview(reviewId);
+        }
+
+
+        public IEnumerable<Review> GetAllReviews() { return _reviewRepository.GetReviews();}
         public IEnumerable<Review> GetReviews()
         {
             return _reviewRepository.GetReviews();

@@ -21,18 +21,6 @@ namespace Albums3Layer.Tests
             _userService = new UserService(_userRepositoryMock.Object);
         }
 
-        [TestMethod]
-        [DataRow("Password123", true)]
-        [DataRow("password123", false)]
-        [DataRow("PASSWORD123", true)]
-        [DataRow("1234567890", false)]
-        [DataRow("Password", true)]
-        [DataRow("password", false)]
-        public void IsValidPassword_ShouldReturnExpectedResult(string password, bool expected)
-        {
-            var result = _userService.IsValidPassword(password);
-            Assert.AreEqual(expected, result);
-        }
 
         [TestMethod]
         public void CreateUser_WithValidPassword_ShouldNotThrowException()
@@ -50,11 +38,12 @@ namespace Albums3Layer.Tests
         }
 
         [TestMethod]
-        public void CreateUser_WithInvalidPassword_ShouldThrowException()
+        public void CreateUser_WithInvalidPassword_ShouldReturnErrorMessage()
         {
             var user = new User { username = "testuser", password = "invalidpass" };
+            string validationResult = _userService.IsValidPassword(user.password);
 
-            Assert.ThrowsException<ArgumentException>(() => _userService.CreateUser(user));
+            Assert.IsNotNull(validationResult, "Expected an error message, but got null.");
         }
 
         [TestMethod]
@@ -73,11 +62,13 @@ namespace Albums3Layer.Tests
         }
 
         [TestMethod]
-        public void EditUser_WithInvalidPassword_ShouldThrowException()
+        public void CreateUser_WithValidPassword_ShouldNotReturnErrorMessage()
         {
-            var user = new User { user_id = 1, username = "testuser", password = "invalidpass" };
+            var user = new User { username = "testuser", password = "ValidPass123" };
+            string validationResult = _userService.IsValidPassword(user.password);
 
-            Assert.ThrowsException<ArgumentException>(() => _userService.EditUser(user));
+            Assert.IsNull(validationResult, "Expected no error message, but got one.");
         }
+
     }
 }

@@ -3,14 +3,21 @@
 @foreach (var review in Model)
 {
     <div>
-        <h2>@review.Title</h2>
-        <p>Rating: @review.Rating</p>
-        <p>@review.Comment</p>
-        <p>Reviewed by: @review.UserName</p>
+        <div>
+            <h2>@review.Title</h2>
+            <p>Rating: @review.Rating</p>
+            <p>@review.Comment</p>
+            <p>Reviewed by: @review.UserName</p>
+        </div>
+
+        @if (ViewBag.UserId == 3)
+        {
+            int userId = ViewBag.UserId;
+            <form method="post" action="@Url.Action("DeleteReview", "Review", new { reviewId = review.Id, userId = userId })">
+                <button type="submit">Delete</button>
+            </form>
+        }
+        
     </div>
-
-    
-
-
 }
 <a class="btn btn-primary" asp-controller="Review" asp-action="Add">Add Review</a>
