@@ -1,10 +1,6 @@
-using System;
-using System.Collections.Generic;
-using Albums3Layer.BBL.Models;
 using Albums3Layer.BLL;
+using Albums3Layer.BBL.Models;
 using BLL.Interfaces;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
 
 namespace Albums3Layer.Tests
 {
@@ -12,15 +8,14 @@ namespace Albums3Layer.Tests
     public class UserServiceTests
     {
         private UserService _userService;
-        private Mock<IUserRepository> _userRepositoryMock;
+        private IUserRepository _fakeUserRepository;
 
         [TestInitialize]
         public void Setup()
         {
-            _userRepositoryMock = new Mock<IUserRepository>();
-            _userService = new UserService(_userRepositoryMock.Object);
+            _fakeUserRepository = new FakeUserRepository();
+            _userService = new UserService(_fakeUserRepository);
         }
-
 
         [TestMethod]
         public void CreateUser_WithValidPassword_ShouldNotThrowException()
@@ -69,6 +64,5 @@ namespace Albums3Layer.Tests
 
             Assert.IsNull(validationResult, "Expected no error message, but got one.");
         }
-
     }
 }
